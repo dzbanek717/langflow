@@ -51,6 +51,6 @@ jobs:
           python-version: "3.13"
       - name: Publish to GitHub Packages
         run: |
-          pip install twine 
-          pip install "packaging >= 24.0" 
+          pip install twine
+          pip install "packaging >= 24.2"
           python -m twine upload --repository-url https://api.github.com/orgs/${{ github.repository_owner }}/packages/pypi/upload dist/*
