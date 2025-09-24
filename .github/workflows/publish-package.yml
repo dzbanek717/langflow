@@ -17,7 +17,7 @@ jobs:
         with:
           enable-cache: true
           cache-dependency-glob: "uv.lock"
-          python-version: "3.12"
+          python-version: "3.13"
           prune-cache: false
       - name: Install the project
         run: uv sync
@@ -48,8 +48,9 @@ jobs:
         uses: astral-sh/setup-uv@v6
         with:
           enable-cache: false
-          python-version: "3.12"
+          python-version: "3.13"
       - name: Publish to GitHub Packages
         run: |
-          pip install twine
+          pip install twine 
+          pip install "packaging >= 24.0" 
           python -m twine upload --repository-url https://api.github.com/orgs/${{ github.repository_owner }}/packages/pypi/upload dist/*
