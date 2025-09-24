@@ -1,0 +1,41 @@
+name: Publish Forked Langflow to GitHub Packages
+
+on:
+  release:
+    types: [created]
+
+jobs:
+  build-and-publish:
+    name: Build and Publish Fork
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Python Environment with uv
+        uses: astral-sh/setup-uv@v1
+        with:
+          python-version: "3.12"
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Build frontend
+        run: |
+          cd src/frontend
+          npm install
+          npm run build
+
+      - name: Build Python package
+        run: |
+          pip install build twine
+          python3 -m build
+
+      - name: Publish to GitHub Packages
+        run: twine upload --repository-url https://pypi.pkg.github.com/${{ github.repository_owner }} --username __token__ --password ${{ secrets.GITHUB_TOKEN }} dist/*
