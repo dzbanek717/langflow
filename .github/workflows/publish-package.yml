@@ -50,4 +50,6 @@ jobs:
           enable-cache: false
           python-version: "3.12"
       - name: Publish to GitHub Packages
-        run: twine upload --repository-url https://pypi.pkg.github.com/${{ github.repository_owner }} --username __token__ --password ${{ secrets.GITHUB_TOKEN }} dist/*
+        run: |
+          pip install twine
+          python -m twine upload --repository-url https://api.github.com/orgs/${{ github.repository_owner }}/packages/pypi/upload dist/*
