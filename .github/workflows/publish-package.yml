@@ -50,6 +50,8 @@ jobs:
           enable-cache: false
           python-version: "3.13"
       - name: Publish to GitHub Packages
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           pip install twine
           pip install "packaging >= 24.2"
