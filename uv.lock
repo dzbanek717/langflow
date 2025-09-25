@@ -2085,7 +2085,7 @@ wheels = [
 
 [[package]]
 name = "dzbanek-langflow"
-version = "1.6.0"
+version = "1.6.2"
 source = { editable = "." }
 dependencies = [
     { name = "aiofile" },
@@ -2472,7 +2472,7 @@ dev = [
 
 [[package]]
 name = "dzbanek-langflow-base"
-version = "0.6.0"
+version = "0.6.1"
 source = { editable = "src/backend/base" }
 dependencies = [
     { name = "aiofile" },
