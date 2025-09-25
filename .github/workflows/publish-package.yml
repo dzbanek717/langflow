@@ -89,8 +89,7 @@ jobs:
 
   publish-lfx:
     name: Publish LFX to PyPI
-    if: inputs.release_lfx == true
-    needs: [build-lfx, test-lfx-cross-platform]
+    needs: [build-lfx]
     runs-on: ubuntu-latest
     steps:
       - name: Download LFX artifact
