@@ -34,7 +34,6 @@ jobs:
   build-lfx:
     name: Build LFX
     runs-on: ubuntu-latest
-    outputs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v5
