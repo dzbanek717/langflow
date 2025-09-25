@@ -39,7 +39,6 @@ jobs:
       id-token: write
     environment:
       name: pypi
-      url: https://pypi.org/p/dzbanek-langflow
     steps:
       - name: Download main artifact
         uses: actions/download-artifact@v4
