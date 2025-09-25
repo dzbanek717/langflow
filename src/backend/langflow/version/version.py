@@ -20,6 +20,8 @@ def get_version() -> str:
         "langflow-base",
         "langflow-nightly",
         "langflow-base-nightly",
+        "dzbanek-langflow-base",
+        "dzbanek-langflow",
     ]
     version = None
     for pkg_name in pkg_names:
