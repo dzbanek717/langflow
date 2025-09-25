@@ -186,7 +186,7 @@ dev = [
 [tool.uv.sources]
 dzbanek-langflow-base = { workspace = true }
 langflow = { workspace = true }
-lfx = { workspace = true }
+dzbanek-lfx = { workspace = true }
 
 [tool.uv.workspace]
 members = [

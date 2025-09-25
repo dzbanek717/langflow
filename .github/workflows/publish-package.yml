@@ -31,6 +31,38 @@ jobs:
           name: dist-main
           path: dist
 
+  build-lfx:
+    name: Build LFX
+    runs-on: ubuntu-latest
+    outputs:
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
+      - name: Setup Environment
+        uses: astral-sh/setup-uv@v6
+        with:
+          enable-cache: true
+          cache-dependency-glob: "uv.lock"
+          python-version: "3.13"
+          prune-cache: false
+      - name: Install LFX dependencies
+        run: uv sync --dev --package dzbanek-lfx
+      - name: Build project for distribution
+        run: |
+          cd src/lfx
+          rm -rf dist/
+          uv build --wheel --out-dir dist
+      - name: Test CLI
+        run: |
+          cd src/lfx
+          uv pip install dist/*.whl --force-reinstall
+          uv run lfx --help
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist-lfx
+          path: src/lfx/dist
+
   publish:
     name: Publish Fork
     needs: [build]
@@ -56,4 +88,25 @@ jobs:
           skip-existing: true
           packages-dir: dist/
 
+  publish-lfx:
+    name: Publish LFX to PyPI
+    if: inputs.release_lfx == true
+    needs: [build-lfx, test-lfx-cross-platform]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download LFX artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: dist-lfx
+          path: src/lfx/dist
+      - name: Setup Environment
+        uses: astral-sh/setup-uv@v6
+        with:
+          enable-cache: false
+          python-version: "3.13"
+      - name: Publish LFX to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          skip-existing: true
+          packages-dir: src/lfx/dist/
 
