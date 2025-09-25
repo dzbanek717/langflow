@@ -1,6 +1,6 @@
 [project]
 name = "dzbanek-lfx"
-version = "0.1.12"
+version = "0.1.13"
 description = "Langflow Executor - A lightweight CLI tool for executing and serving Langflow AI flows"
 readme = "README.md"
 authors = [
@@ -50,6 +50,9 @@ build-backend = "hatchling.build"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/lfx"]
+
+[tool.hatch.build.sources]
+lfx = "src/lfx"
 
 [tool.ruff]
 line-length = 120

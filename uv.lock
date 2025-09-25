@@ -1,5 +1,5 @@
 version = 1
-revision = 2
+revision = 3
 requires-python = ">=3.10, <3.14"
 resolution-markers = [
     "python_full_version < '3.11' and platform_python_implementation == 'PyPy' and sys_platform == 'darwin'",
@@ -2085,7 +2085,7 @@ wheels = [
 
 [[package]]
 name = "dzbanek-langflow"
-version = "1.6.2"
+version = "1.6.3"
 source = { editable = "." }
 dependencies = [
     { name = "aiofile" },
@@ -2472,7 +2472,7 @@ dev = [
 
 [[package]]
 name = "dzbanek-langflow-base"
-version = "0.6.1"
+version = "0.6.2"
 source = { editable = "src/backend/base" }
 dependencies = [
     { name = "aiofile" },
@@ -2735,7 +2735,7 @@ dev = [
 
 [[package]]
 name = "dzbanek-lfx"
-version = "0.1.12"
+version = "0.1.13"
 source = { editable = "src/lfx" }
 dependencies = [
     { name = "aiofile" },
