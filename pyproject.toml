@@ -1,6 +1,6 @@
 [project]
 name = "dzbanek-langflow"
-version = "1.6.5"
+version = "1.6.6"
 description = "A Python package with a built-in web application"
 requires-python = ">=3.10,<3.14"
 license = "MIT"
