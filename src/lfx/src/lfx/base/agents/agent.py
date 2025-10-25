@@ -10,7 +10,7 @@ from langchain_core.runnables import Runnable
 
 from lfx.base.agents.callback import AgentAsyncHandler
 from lfx.base.agents.events import ExceptionWithMessageError, process_agent_events
-from lfx.base.agents.utils import data_to_messages
+from lfx.base.agents.utils import data_to_messages, get_chat_output_sender_name
 from lfx.custom.custom_component.component import Component, _get_component_toolkit
 from lfx.field_typing import Tool
 from lfx.inputs.inputs import InputTypes, MultilineInput
@@ -137,21 +137,43 @@ class LCAgentComponent(Component):
                 verbose=verbose,
                 max_iterations=max_iterations,
             )
-        input_dict: dict[str, str | list[BaseMessage]] = {
-            "input": self.input_value.to_lc_message() if isinstance(self.input_value, Message) else self.input_value
-        }
+        # Convert input_value to proper format for agent
+        if hasattr(self.input_value, "to_lc_message") and callable(self.input_value.to_lc_message):
+            lc_message = self.input_value.to_lc_message()
+            input_text = lc_message.content if hasattr(lc_message, "content") else str(lc_message)
+        else:
+            lc_message = None
+            input_text = self.input_value
+
+        input_dict: dict[str, str | list[BaseMessage]] = {}
         if hasattr(self, "system_prompt"):
             input_dict["system_prompt"] = self.system_prompt
         if hasattr(self, "chat_history") and self.chat_history:
-            if isinstance(self.chat_history, Data):
+            if (
+                hasattr(self.chat_history, "to_data")
+                and callable(self.chat_history.to_data)
+                and self.chat_history.__class__.__name__ == "Data"
+            ):
+                input_dict["chat_history"] = data_to_messages(self.chat_history)
+            # Handle both lfx.schema.message.Message and langflow.schema.message.Message types
+            if all(hasattr(m, "to_data") and callable(m.to_data) and "text" in m.data for m in self.chat_history):
                 input_dict["chat_history"] = data_to_messages(self.chat_history)
             if all(isinstance(m, Message) for m in self.chat_history):
                 input_dict["chat_history"] = data_to_messages([m.to_data() for m in self.chat_history])
-        if hasattr(input_dict["input"], "content") and isinstance(input_dict["input"].content, list):
+        if hasattr(lc_message, "content") and isinstance(lc_message.content, list):
             # ! Because the input has to be a string, we must pass the images in the chat_history
 
-            image_dicts = [item for item in input_dict["input"].content if item.get("type") == "image"]
-            input_dict["input"].content = [item for item in input_dict["input"].content if item.get("type") != "image"]
+            image_dicts = [item for item in lc_message.content if item.get("type") == "image"]
+            text_items = [item for item in lc_message.content if item.get("type") != "image"]
+
+            # Extract text content from remaining items
+            if text_items:
+                # If there are text items, extract their text content
+                input_text = " ".join(item.get("text", "") for item in text_items if item.get("type") == "text").strip()
+
+            # If input_text is still a list or empty, provide a default
+            if isinstance(input_text, list) or not input_text:
+                input_text = "Process the provided images."
 
             if "chat_history" not in input_dict:
                 input_dict["chat_history"] = []
@@ -160,6 +182,13 @@ class LCAgentComponent(Component):
             else:
                 input_dict["chat_history"] = [HumanMessage(content=[image_dict]) for image_dict in image_dicts]
 
+        # Final safety check: ensure input_text is never empty (prevents Anthropic API errors)
+        if not input_text or (isinstance(input_text, (list, str)) and not str(input_text).strip()):
+            input_text = "Continue the conversation."
+        # Ensure the agent input is a string
+        if not isinstance(input_text, str):
+            input_text = " ".join(map(str, input_text)) if isinstance(input_text, list) else str(input_text)
+        input_dict["input"] = input_text
         if hasattr(self, "graph"):
             session_id = self.graph.session_id
         elif hasattr(self, "_session_id"):
@@ -167,9 +196,11 @@ class LCAgentComponent(Component):
         else:
             session_id = None
 
+        sender_name = get_chat_output_sender_name(self) or self.display_name or "AI"
+
         agent_message = Message(
             sender=MESSAGE_SENDER_AI,
-            sender_name=self.display_name or "Agent",
+            sender_name=sender_name,
             properties={"icon": "Bot", "state": "partial"},
             content_blocks=[ContentBlock(title="Agent Steps", contents=[])],
             session_id=session_id or uuid.uuid4(),

@@ -40,6 +40,7 @@ class Message(Data):
     sender_name: str | None = None
     files: list[str | Image] | None = Field(default=[])
     session_id: str | UUID | None = Field(default="")
+    context_id: str | UUID | None = Field(default="")
     timestamp: Annotated[str, timestamp_to_str_validator] = Field(
         default_factory=lambda: datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S.%f %Z")
     )
@@ -116,8 +117,12 @@ class Message(Data):
 
     def to_lc_message(
         self,
+        model_name: str | None = None,
     ) -> BaseMessage:
         """Converts the Data to a BaseMessage.
+
+        Args:
+            model_name: The model name to use for conversion. Optional.
 
         Returns:
             BaseMessage: The converted BaseMessage.
@@ -134,7 +139,8 @@ class Message(Data):
         if self.sender == MESSAGE_SENDER_USER or not self.sender:
             if self.files:
                 contents = [{"type": "text", "text": text}]
-                contents.extend(self.get_file_content_dicts())
+                file_contents = self.get_file_content_dicts(model_name)
+                contents.extend(file_contents)
                 human_message = HumanMessage(content=contents)
             else:
                 human_message = HumanMessage(content=text)
@@ -178,6 +184,7 @@ class Message(Data):
             sender_name=data.sender_name,
             files=data.files,
             session_id=data.session_id,
+            context_id=data.context_id,
             timestamp=data.timestamp,
             flow_id=data.flow_id,
             error=data.error,
@@ -191,15 +198,19 @@ class Message(Data):
         return value
 
     # Keep this async method for backwards compatibility
-    def get_file_content_dicts(self):
+    def get_file_content_dicts(self, model_name: str | None = None):
         content_dicts = []
-        files = get_file_paths(self.files)
+        try:
+            files = get_file_paths(self.files)
+        except Exception as e:  # noqa: BLE001
+            logger.error(f"Error getting file paths: {e}")
+            return content_dicts
 
         for file in files:
             if isinstance(file, Image):
                 content_dicts.append(file.to_content_dict())
             else:
-                content_dicts.append(create_image_content_dict(file))
+                content_dicts.append(create_image_content_dict(file, None, model_name))
         return content_dicts
 
     def load_lc_prompt(self):
@@ -312,6 +323,7 @@ class MessageResponse(DefaultModel):
     sender: str
     sender_name: str
     session_id: str
+    context_id: str | None = None
     text: str
     files: list[str] = []
     edit: bool
@@ -369,6 +381,7 @@ class MessageResponse(DefaultModel):
             sender_name=message.sender_name,
             text=message.text,
             session_id=message.session_id,
+            context_id=message.context_id,
             files=message.files or [],
             timestamp=message.timestamp,
             flow_id=flow_id,
@@ -419,6 +432,7 @@ class ErrorMessage(Message):
         self,
         exception: BaseException,
         session_id: str | None = None,
+        context_id: str | None = None,
         source: Source | None = None,
         trace_name: str | None = None,
         flow_id: UUID | str | None = None,
@@ -437,6 +451,7 @@ class ErrorMessage(Message):
 
         super().__init__(
             session_id=session_id,
+            context_id=context_id,
             sender=source.display_name if source else None,
             sender_name=source.display_name if source else None,
             text=plain_reason,
