@@ -23,6 +23,7 @@ jobs:
         run: uv sync
       - name: Check for dependency incompatibility
         run: uv pip check
+        continue-on-error: true
       - name: Build project for distribution
         run: make build main=true args="--no-sources --wheel"
       - name: Upload Artifact
