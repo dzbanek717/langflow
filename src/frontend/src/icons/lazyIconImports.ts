@@ -1,6 +1,10 @@
 // Export the lazy loading mapping for icons
 export const lazyIconsMapping = {
   AIML: () => import("@/icons/AIML").then((mod) => ({ default: mod.AIMLIcon })),
+  Agentics: () =>
+    import("@/icons/Agentics").then((mod) => ({
+      default: mod.AgenticsIcon,
+    })),
   AgentQL: () =>
     import("@/icons/AgentQL").then((mod) => ({ default: mod.AgentQLIcon })),
   Agiled: () =>
@@ -17,10 +21,33 @@ export const lazyIconsMapping = {
     import("@/icons/ArXiv").then((mod) => ({ default: mod.ArXivIcon })),
   Arize: () =>
     import("@/icons/Arize").then((mod) => ({ default: mod.ArizeIcon })),
+  Apollo: () =>
+    import("@/icons/Apollo").then((mod) => ({ default: mod.ApolloIcon })),
+  Bitbucket: () =>
+    import("@/icons/Bitbucket").then((mod) => ({ default: mod.BitbucketIcon })),
+  Canva: () =>
+    import("@/icons/Canva").then((mod) => ({ default: mod.CanvaIcon })),
+  Coda: () => import("@/icons/Coda").then((mod) => ({ default: mod.CodaIcon })),
   AssemblyAI: () =>
     import("@/icons/AssemblyAI").then((mod) => ({
       default: mod.AssemblyAIIcon,
     })),
+  Elevenlabs: () =>
+    import("@/icons/Elevenlabs").then((mod) => ({
+      default: mod.ElevenlabsIcon,
+    })),
+  Googlebigquery: () =>
+    import("@/icons/Googlebigquery").then((mod) => ({
+      default: mod.GooglebigqueryIcon,
+    })),
+  Heygen: () =>
+    import("@/icons/Heygen").then((mod) => ({ default: mod.HeygenIcon })),
+  Peopledatalabs: () =>
+    import("@/icons/Peopledatalabs").then((mod) => ({
+      default: mod.PeopledatalabsIcon,
+    })),
+  Snowflake: () =>
+    import("@/icons/Snowflake").then((mod) => ({ default: mod.SnowflakeIcon })),
   Googledocs: () =>
     import("@/icons/googledocs").then((mod) => ({
       default: mod.GoogledocsIcon,
@@ -40,7 +67,7 @@ export const lazyIconsMapping = {
   Miro: () => import("@/icons/miro").then((mod) => ({ default: mod.MiroIcon })),
   Figma: () =>
     import("@/icons/figma").then((mod) => ({ default: mod.FigmaIcon })),
-  Discord: () =>
+  discord: () =>
     import("@/icons/discord").then((mod) => ({
       default: mod.DiscordIcon,
     })),
@@ -147,6 +174,12 @@ export const lazyIconsMapping = {
   Evernote: () =>
     import("@/icons/Evernote").then((mod) => ({ default: mod.EvernoteIcon })),
   Exa: () => import("@/icons/Exa").then((mod) => ({ default: mod.ExaIcon })),
+  ExaComposio: () =>
+    import("@/icons/ExaComposio").then((mod) => ({
+      default: mod.ExaIconComposio,
+    })),
+  Fireflies: () =>
+    import("@/icons/Fireflies").then((mod) => ({ default: mod.FirefliesIcon })),
   Excel: () =>
     import("@/icons/Excel").then((mod) => ({ default: mod.ExcelIcon })),
   FacebookMessenger: () =>
@@ -169,6 +202,12 @@ export const lazyIconsMapping = {
     import("@/icons/GitBook").then((mod) => ({ default: mod.GitBookIcon })),
   GitLoader: () =>
     import("@/icons/GitLoader").then((mod) => ({ default: mod.GitLoaderIcon })),
+  Github: () =>
+    import("@/icons/github").then((mod) => ({ default: mod.GithubIcon })),
+  GithubComposio: () =>
+    import("@/icons/GithubComposio").then((mod) => ({
+      default: mod.GithubIcon,
+    })),
   Glean: () =>
     import("@/icons/Glean").then((mod) => ({ default: mod.GleanIcon })),
   GlobeOk: () =>
@@ -243,10 +282,20 @@ export const lazyIconsMapping = {
     import("@/icons/HuggingFace").then((mod) => ({
       default: mod.HuggingFaceIcon,
     })),
+  IBM: () =>
+    import("@/icons/IBM").then((mod) => ({
+      default: mod.IBMIcon,
+    })),
+  WatsonxAI: () =>
+    import("@/icons/IBM").then((mod) => ({
+      default: mod.WatsonxAiIcon,
+    })),
   Icosa: () =>
     import("@/icons/Icosa").then((mod) => ({ default: mod.IcosaIcon })),
   IFixIt: () =>
     import("@/icons/IFixIt").then((mod) => ({ default: mod.IFixIcon })),
+  Indicator: () =>
+    import("@/icons/Indicator").then((mod) => ({ default: mod.IndicatorIcon })),
   Instagram: () =>
     import("@/icons/Instagram").then((mod) => ({ default: mod.InstagramIcon })),
   javascript: () =>
@@ -264,6 +313,8 @@ export const lazyIconsMapping = {
     import("@/icons/LangChain").then((mod) => ({ default: mod.LangChainIcon })),
   Langwatch: () =>
     import("@/icons/Langwatch").then((mod) => ({ default: mod.LangwatchIcon })),
+  LiteLLM: () =>
+    import("@/icons/LiteLLM").then((mod) => ({ default: mod.LiteLLMIcon })),
   LMStudio: () =>
     import("@/icons/LMStudio").then((mod) => ({ default: mod.LMStudioIcon })),
   Listennotes: () =>
@@ -274,6 +325,10 @@ export const lazyIconsMapping = {
     import("@/icons/Maritalk").then((mod) => ({ default: mod.MaritalkIcon })),
   Mcp: () => import("@/icons/MCP").then((mod) => ({ default: mod.McpIcon })),
   Mem0: () => import("@/icons/Mem0").then((mod) => ({ default: mod.Mem0 })),
+  Mem0Composio: () =>
+    import("@/icons/Mem0Composio").then((mod) => ({
+      default: mod.Mem0IconComposio,
+    })),
   Meta: () => import("@/icons/Meta").then((mod) => ({ default: mod.MetaIcon })),
   Midjourney: () =>
     import("@/icons/Midjorney").then((mod) => ({
@@ -320,6 +375,10 @@ export const lazyIconsMapping = {
     import("@/icons/Perplexity").then((mod) => ({
       default: mod.PerplexityIcon,
     })),
+  PerplexityComposio: () =>
+    import("@/icons/PerplexityComposio").then((mod) => ({
+      default: mod.PerplexityIconComposio,
+    })),
   Pinecone: () =>
     import("@/icons/Pinecone").then((mod) => ({ default: mod.PineconeIcon })),
   Postgres: () =>
@@ -362,6 +421,10 @@ export const lazyIconsMapping = {
     import("@/icons/SerpSearch").then((mod) => ({
       default: mod.SerpSearchIcon,
     })),
+  SerpSearchComposio: () =>
+    import("@/icons/SerpAPIComposio").then((mod) => ({
+      default: mod.SerpSearchIconComposio,
+    })),
   Serper: () =>
     import("@/icons/Serper").then((mod) => ({ default: mod.SerperIcon })),
   Share: () =>
@@ -370,6 +433,10 @@ export const lazyIconsMapping = {
     import("@/icons/Share2").then((mod) => ({ default: mod.Share2Icon })),
   Slack: () =>
     import("@/icons/Slack/SlackIcon").then((mod) => ({ default: mod.default })),
+  SlackComposio: () =>
+    import("@/icons/slackComposio").then((mod) => ({
+      default: mod.SlackIcons,
+    })),
   Slides: () =>
     import("@/icons/Slides").then((mod) => ({ default: mod.SlidesIcon })),
   Spider: () =>
@@ -416,25 +483,13 @@ export const lazyIconsMapping = {
     import("@/icons/vectorstores").then((mod) => ({
       default: mod.VectorStoresIcon,
     })),
-  VertexAI: () =>
-    import("@/icons/VertexAI").then((mod) => ({ default: mod.VertexAIIcon })),
-  WatsonxAI: () =>
-    import("@/icons/IBMWatsonx").then((mod) => ({
-      default: mod.WatsonxAiIcon,
-    })),
-  Weaviate: () =>
-    import("@/icons/Weaviate").then((mod) => ({ default: mod.WeaviateIcon })),
-  Wikipedia: () =>
-    import("@/icons/Wikipedia/Wikipedia").then((mod) => ({
-      default: mod.default,
-    })),
   Windsurf: () =>
     import("@/icons/Windsurf").then((mod) => ({ default: mod.WindsurfIcon })),
   Wolfram: () =>
     import("@/icons/Wolfram/Wolfram").then((mod) => ({ default: mod.default })),
   xAI: () => import("@/icons/xAI").then((mod) => ({ default: mod.XAIIcon })),
   YouTube: () =>
-    import("@/icons/Youtube").then((mod) => ({ default: mod.YouTubeSvgIcon })),
+    import("@/icons/Youtube").then((mod) => ({ default: mod.YoutubeIcon })),
   ZepMemory: () =>
     import("@/icons/ZepMemory").then((mod) => ({ default: mod.ZepMemoryIcon })),
 };

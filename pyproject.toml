@@ -1,6 +1,6 @@
 [project]
 name = "dzbanek-langflow"
-version = "1.7.1"
+version = "1.8.1"
 description = "A Python package with a built-in web application"
 requires-python = ">=3.10,<3.14"
 license = "MIT"
@@ -17,7 +17,7 @@ maintainers = [
 ]
 # Define your main dependencies here
 dependencies = [
-    "dzbanek-langflow-base~=0.7.1",
+    "dzbanek-langflow-base~=0.8.1",
     "beautifulsoup4==4.12.3",
     "google-search-results>=2.4.1,<3.0.0",
     "google-api-python-client==2.154.0",
@@ -146,7 +146,7 @@ dev = [
     "types-redis>=4.6.0.5",
     "ipykernel>=6.29.0",
     "mypy>=1.11.0",
-    "ruff>=0.12.7",
+    "ruff~=0.13.1",
     "httpx>=0.28.1",
     "pytest>=8.2.0",
     "types-requests>=2.32.0",
@@ -176,7 +176,6 @@ dev = [
     "pytest-github-actions-annotate-failures>=0.2.0",
     "blockbuster>=1.5.20,<1.6",
     "types-aiofiles>=24.1.0.20240626",
-    "codeflash>=0.8.4",
     "hypothesis>=6.123.17",
     "locust~=2.40.5",
     "pytest-rerunfailures>=15.0",
@@ -186,14 +185,24 @@ dev = [
     'elevenlabs>=1.52.0; python_version != "3.12"',
     "faker>=37.0.0",
     "pytest-timeout>=2.3.1",
+    "types-cachetools>=5.5.0.20240820",
     "pyyaml>=6.0.2",
     "pyleak>=0.1.14",
+    "mcp-server-fetch>=2025.1.17",
+    "onnxruntime>=1.20,<=1.23" # >=1.24 does not support Python 3.10
 ]
+
+[[tool.uv.index]]
+name = "pytorch-cpu"
+url = "https://download.pytorch.org/whl/cpu"
+explicit = true
 
 [tool.uv.sources]
 dzbanek-langflow-base = { workspace = true }
 langflow = { workspace = true }
 dzbanek-lfx = { workspace = true }
+torch = { index = "pytorch-cpu" }
+torchvision = { index = "pytorch-cpu" }
 
 [tool.uv.workspace]
 members = [
@@ -215,6 +224,10 @@ docling = [
     "tesserocr>=2.8.0",
     "rapidocr-onnxruntime>=1.4.4",
     "ocrmac>=1.0.0; sys_platform == 'darwin'",
+    # CPU-only PyTorch required for docling features
+    # Loose version ranges intentionally used to avoid conflicts with transitive dependencies (e.g., altk)
+    "torch>=2.0.0",
+    "torchvision>=0.15.0",
 ]
 
 audio = [
@@ -377,6 +390,11 @@ external = ["RUF027"]
 "src/lfx/src/lfx/base/curl/parse.py" = [
     "S105",  # False positive: 'token' variable name, not a password
 ]
+"src/lfx/src/lfx/services/auth/service.py" = [
+    "ARG002",  # No-op impl: unused args required by interface
+    "EM101",  # NotImplementedError messages as literals
+    "TC003",  # Type-only imports used in signatures
+]
 "src/lfx/src/lfx/base/mcp/util.py" = [
     "SLF001",  # MCP library private member access
 ]
@@ -435,6 +453,13 @@ external = ["RUF027"]
     "S110",  # Try-except-pass for optional error logging
 ]
 "src/backend/tests/*" = [
+    "D1",
+    "PLR2004",
+    "S101",
+    "SLF001",
+    "BLE001",  # allow broad-exception catching in tests
+]
+"src/backend/base/langflow/tests/*" = [
     "D1",
     "PLR2004",
     "S101",
